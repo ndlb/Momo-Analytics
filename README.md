@@ -6,7 +6,7 @@ Users' retention has always been one of the key targets that MoMo is striving to
 
 The data given include their daily transaction history data during Jan 2021 - Mar 2022 (table 'Transactions'), and the Loyalty program's rules (tables 'Loyalty Points' and 'Loyalty Benefits') to measure and analyze trends.
 
-### Given Data ("2022 Case challenge_ DA update.xlss"):
+### Given Data ("2022 Case challenge_ DA update.xlsx"):
 
 #### Transactions
 | User_id | Order_id | Date       | GMV    | Service Group | Merchant_id |
