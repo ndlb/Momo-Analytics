@@ -1,93 +1,50 @@
 # MoMo User Retention Analysis and Loyalty Program Evaluation
 
-## A. Data Source
+## A. Overview
 
-Users' retention has always been one of the key targets that MoMo is striving to improve. A Loyalty program called "MoMo Refund", one of the projects aiming to achieve such a goal, was launched on January 1st, 2022.
+This project involves analyzing MoMo’s user retention and evaluating the effectiveness of the "MoMo Refund" loyalty program, which was launched on January 1st, 2022. The analysis aims to optimize cashback costs while maintaining or improving user retention. The file **Momo Analytics.pdf** is a presentation detailing the methods, data processing steps, and findings related to this project.
 
-The data given include their daily transaction history data during Jan 2021 - Mar 2022 (table 'Transactions'), and the Loyalty program's rules (tables 'Loyalty Points' and 'Loyalty Benefits') to measure and analyze trends.
+## B. Data Source
 
-### Given Data:
+The data for this project includes daily transaction history from January 2021 to March 2022 and the loyalty program's rules, provided in two tables:
 
-#### Transactions
-| User_id | Order_id | Date       | GMV    | Service Group | Merchant_id |
-|---------|----------|------------|--------|---------------|-------------|
-| 123     | 234      | 01/17/2020 | 100000 | supermarket   | 12          |
-| ...     | ...      | ...        | ...    | ...           | ...         |
+- **Transactions Table**: Contains information on user transactions.
+- **Loyalty Points and Benefits Tables**: Define how users earn points and receive cashback.
 
-**Schema:**
-- **User_id:** Each user in MoMo will be given a unique ID.
-- **Order_id:** Each transaction will be given a unique ID.
-- **Date:** Date on which the transaction takes place.
-- **GMV (Gross Merchandise Value):** Total amount of money that the user spends (VND).
-- **Service Group:** Group services that users spend on.
-- **Merchant_id:** Each merchant will be given a unique ID.
+### Transactions Table Schema:
+| Column        | Data Type | Description                                                  |
+|---------------|-----------|--------------------------------------------------------------|
+| User_id       | int       | Unique identifier for each user.                             |
+| Order_id      | int       | Unique identifier for each transaction.                      |
+| Date          | date      | Date of the transaction.                                     |
+| GMV           | int       | Gross Merchandise Value (amount spent in VND).               |
+| Service Group | str       | Group of services where the user spent money.                |
+| Merchant_id   | int       | Unique identifier for the merchant involved in the transaction. |
 
-#### Loyalty Points
-| Service Group | Point Mechanism           | Maximum Point Per Trans |
-|---------------|---------------------------|-------------------------|
-| supermarket   | 1 point / 1000 VND GMV    | 500 points              |
-| data          | 10 points / 1000 VND GMV  | 1000 points             |
-| ...           | ...                       | ...                     |
+### Loyalty Points Table Schema:
+| Column         | Data Type | Description                                                   |
+|----------------|-----------|---------------------------------------------------------------|
+| Service Group  | str       | Group of services where users earn loyalty points.             |
+| Point Mechanism| int       | Points earned per 1000 VND spent.                              |
+| Max Points     | int       | Maximum points that can be earned in a single transaction.     |
 
-**Schema:**
-- **Service Group:** Group services that users spend on.
-- **Point Mechanism:** Each group service will be given a specific rule to calculate the accumulated points in the loyalty program.
-- **Maximum Point Per Trans:** Limit of how many points a user can get for one transaction.
+### Loyalty Benefits Table Schema:
+| Column         | Data Type | Description                                                   |
+|----------------|-----------|---------------------------------------------------------------|
+| Class ID       | int       | User rank ID based on loyalty points (Standard, Silver, etc.). |
+| % Cashback     | int       | Percentage of cashback for transactions in each service group. |
 
-#### Loyalty Benefits
-| Class ID | Group          | % Cashback |
-|----------|----------------|------------|
-| 1        | cvs            | 5%         |
-| 2        | offlinebeverage| 5%         |
-| 3        | ...            | ...        |
-
-**Schema:**
-- **Class ID:** Users' ranking ID according to the amount of loyalty points accumulated.
-- **% Cashback:** Percentage amount of money that returns to the user's wallet after spending on a MoMo service. 
-  - Example: User A spends 100,000 VND on a supermarket service. User A then receives 5,000 VND (5%) cashback to their wallet.
-
-## B. Requirements
+## C. Requirements
 
 ### Part 1: Data Processing
-1. **Combine with the 'Loyalty Points' table:**
-    - Add a column 'Loyalty Points' in the 'Transactions' table with the given rules.
-    - Create another table named 'Loyalty Ranking' which includes columns 'Rank_name' and 'Calculated_points' to calculate the rank of each user on a daily basis.
-    - At the end of Mar 2022, determine how many users achieved the rank of Gold.
-    
-    **Ranking rules:**
-    | Class ID | Rank_name | Loyalty Points         |
-    |----------|-----------|------------------------|
-    | 1        | STANDARD  | 1 - 999 points         |
-    | 2        | SILVER    | 1000 - 1999 points     |
-    | 3        | GOLD      | 2000 - 4999 points     |
-    | 4        | DIAMOND   | >= 5000 points         |
-    
-    **Important Notes:**
-    - Points calculated for each transaction will expire after 30 days since the day the transaction is made.
-    - User's rank will be reduced or increased according to the change in their accumulated loyalty points.
-
-2. **Combine with the 'Loyalty Benefits' table and 'Loyalty Ranking' table:**
-    - Add a column '%cashback' in the 'Transactions' table and calculate the total cashback cost in February 2022.
-    
-    **Notes:**
-    - Cashback cost can be calculated by multiplying %cashback with GMV.
-    - Users can only claim a maximum of 10,000 VND per transaction.
-
-3. **Design a retention chart:**
-    - Monitor since the program was launched.
+1. Combine the 'Transactions' table with the 'Loyalty Points' table.
+2. Create a table 'Loyalty Ranking' to calculate user ranks based on loyalty points.
+3. Determine how many users achieved the rank of Gold by the end of March 2022.
 
 ### Part 2: Analyze and Comment
-1. **User retention and transaction behavior:**
-    - Analyze trends since the Loyalty program launched.
-    - Provide advice for the Marketing department in designing promotion campaigns to increase user retention performance monthly.
-
-2. **Optimization of cashback cost and GMV:**
-    - Propose ideas to change the schemes of Loyalty benefits and Loyalty Points to alleviate the cost amount while maintaining the growth of GMV and increasing the retention rate.
+1. Analyze user retention trends since the loyalty program launched.
+2. Propose strategies to optimize cashback costs while maintaining GMV growth and retention.
 
 ### Part 3: Extended Questions
-1. **Loyalty program development strategy:**
-    - Provide ideas for MoMo's loyalty program development strategy.
-
-2. **Gamification Strategy:**
-    - Calculate the number of winners who maintained a 20-day or longer streak of being in the DIAMOND ranking during the last thirty days (March 01 - March 31).
-    - Identify the user(s) who maintained the longest streak during that time.
+1. Provide ideas for developing MoMo's loyalty program.
+2. Implement a gamification strategy by calculating streaks of DIAMOND rank users.
